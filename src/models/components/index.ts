@@ -15,11 +15,14 @@ export interface WeatherWidgetProps {
     }
     airQuantity: string
   }
+  currentUnit: string
+  currentAqiLevel: string
+  handleChangeTempUnit: (unit: string) => void
   forecast: Array<Forecast>
 }
 
-interface Forecast {
-  weekDay: string
+export interface Forecast {
+  date: number
   icon: string
   maxTemperature: number
   minTemperature: number

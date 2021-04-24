@@ -1,6 +1,6 @@
 import axios from 'axios'
 import ApiConfig from 'configs/apiConfig'
-import { isArray, forEach } from 'lodash'
+import { isArray, forEach, inRange } from 'lodash'
 
 const apiConfig = ApiConfig()
 
@@ -80,6 +80,53 @@ export const Utils = {
   formatNumberWithCommas: function(x: number) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   },
+  formatCF: function(temp: number, currentUnit: string) {
+    let temperature: number
+    switch(currentUnit) {
+      case 'celcius':
+        temperature = (temp - 32) / (9/5)
+        break
+      case 'farenheit':
+        temperature = temp
+        break
+      default:
+        temperature = temp
+    }
+    return temperature
+  },
+
+  formatAMPM: function(hour: number) {
+    var hours = hour
+    var ampm = hours >= 12 ? 'PM' : 'AM'
+    hours = hours % 12
+    hours = hours ? hours : 12 // the hour '0' should be '12'
+    var strTime = hours + ampm
+    return strTime;
+  },
+
+  generateWindDirection: function(deg: number) {
+    const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+    const index = Math.round(((deg %= 360) < 0 ? deg + 360 : deg) / 45) % 8;
+    return directions[index]
+  },
+
+  generateAirPollutionLevel: function(aqi: number) {
+    let result = 'Good'
+    if (aqi < 50) {
+      result = 'Good'
+    } else if (inRange(aqi, 50, 100)) {
+      result = 'Moderate'
+    } else if (inRange(aqi, 101, 150)) {
+      result = 'Unhealthy for Sensitive Groups'
+    } else if (inRange(aqi, 151, 200)) {
+      result = 'Unhealthy'
+    } else if (inRange(aqi, 201, 300)) {
+      result = 'Very Unhealthy'
+    } else if (aqi > 300) {
+      result = 'Hazardous'
+    }
+    return result
+  }
 }
 
 export default instance

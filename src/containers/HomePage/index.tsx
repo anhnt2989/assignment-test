@@ -7,10 +7,12 @@ import dayjs from 'dayjs'
 import LocationInput from 'components/LocationInput'
 import WeatherWidget from 'components/WeatherWidget'
 
-import { CFWeatherAPIParams } from 'models'
+import { CFWeatherAPIParams, AirPollutionAPIParams } from 'models'
+import { Utils } from 'utils'
 import { 
   getCoordinatesFromLocationName,
-  getCFWeather
+  getCFWeather,
+  getAirPollution
 } from 'services'
 
 import Wrapper from './HomePageWrapper'
@@ -22,31 +24,27 @@ dayjs.extend(customParseFormat)
 
 function HomePage() {
   const [currentLocation, setCurrentLocation] = React.useState(null)
-  const [locationParam, setLocationParam] = React.useState({q: ''})
-  // const [units, setUnits] = React.useState('celcius')
   const [weatherData, setWeatherData] = React.useState(null)
   const [weatherOverall, setWeatherOverall] = React.useState(null)
   const [weatherInfo, setWeatherInfo] = React.useState(null)
+  const [locationParam, setLocationParam] = React.useState({q: ''})
+  const [unit, setUnit] = React.useState('farenheit')
+  const [currentAqiLevel, setCurrentAqiLevel] = React.useState('Good')
   const [weatherStatus, setWeatherStatus] = React.useState('Unknown')
   const [forecast, setForecast] = React.useState([])
 
-  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 
   React.useEffect(() => {
     if (currentLocation) {
-      // const { lat, lon } = currentLocation
-      getForecastWeather({lat: currentLocation.lat, lon: currentLocation.lon})
+      const { lat, lon } = currentLocation
+      getForecastWeather({ lat, lon, exclude: 'hourly' })
+      getPollutionStatus({ lat, lon })
     }
-  }, [currentLocation])
+    // eslint-disable-next-line
+  }, [currentLocation, unit])
 
-  const onLocationChange = (event: any) => {
-    let coordinateParams = {
-      q: event.target.value,
-    }
-    setLocationParam(coordinateParams)
-  }
-
-  const getLocationCoors = async (event: any) => {
+  const getLocationCoors = async () => {
     try {
       const response = await getCoordinatesFromLocationName(locationParam)
       if (response && !isEmpty(response)) {
@@ -61,32 +59,60 @@ function HomePage() {
     try {
       const response = await getCFWeather(requestParams)
       if (response && !isEmpty(response)) {
-        console.log(response)
         const status = response?.current?.weather[0]?.main ?? 'Unknown'
-        const overall = map(response, el => {
-          // return {
-          //   icon: el.current.weather[0].icon,
-          //   temperature: ,
-          // }
-          console.log(el)
+        const overall = {
+          icon: `http://openweathermap.org/img/wn/${response?.current?.weather[0]?.icon}@2x.png`,
+          temperature: Utils.formatCF(response?.current?.temp, unit)
+        }
+        const info = {
+          humidity: response?.current?.humidity,
+          windStatus: {
+            windSpeed: response?.current?.wind_speed,
+            windDirection: Utils.generateWindDirection(response?.current?.wind_deg)
+          }
+        }
+        const forecast = map(response.daily, (el: {dt: number, weather: Array<{description: string, icon: string, id: number, main: string}>, temp: {day: 300.95, eve: number, max: number, min: number, morn: number, night: number}}) => {
+          return {
+            date: el.dt,
+            icon: `http://openweathermap.org/img/wn/${el.weather[0].icon}@2x.png`,
+            maxTemperature: el.temp.max,
+            minTemperature: el.temp.min,
+          }
+          
         })
         setWeatherData(response)
         setWeatherStatus(status)
+        setWeatherOverall(overall)
+        setWeatherInfo(info)
+        setForecast(forecast)
       }
     } catch(error) {
 
     }
   }
 
-  const formatAMPM = (hour: number) => {
-    var hours = hour
-    var ampm = hours >= 12 ? 'PM' : 'AM'
-    hours = hours % 12
-    hours = hours ? hours : 12 // the hour '0' should be '12'
-    var strTime = hours + ampm
-    return strTime;
+  const getPollutionStatus = async (requestParams: AirPollutionAPIParams) => {
+    try {
+      const response = await getAirPollution(requestParams)
+      if (response && !isEmpty(response)) {
+        const aqiLevel = Utils.generateAirPollutionLevel(response?.list[0]?.main?.aqi)
+        setCurrentAqiLevel(aqiLevel)
+      }
+    } catch(error) {
+
+    }
   }
-  
+
+  const onLocationChange = (event: any) => {
+    let coordinateParams = {
+      q: event.target.value,
+    }
+    setLocationParam(coordinateParams)
+  }
+
+  const handleChangeTempUnit = (unit: string) => {
+    setUnit(unit)
+  }
 
   return (
     <Wrapper>
@@ -115,11 +141,14 @@ function HomePage() {
             <Col xs={24} md={18} lg={12}>
               <WeatherWidget
                 location={`${currentLocation?.name}, ${currentLocation?.country}`}
-                date={`${days[new Date().getDay()]} ${formatAMPM(new Date().getHours())}`}
+                date={`${days[new Date().getDay()]} ${Utils.formatAMPM(new Date().getHours())}`}
                 weatherStatus={weatherStatus}
                 weatherOverall={weatherOverall}
                 weatherInfo={weatherInfo}
+                currentAqiLevel={currentAqiLevel}
                 forecast={forecast}
+                currentUnit={unit}
+                handleChangeTempUnit={handleChangeTempUnit}
               />
             </Col>
             <Col xs={24} md={3} lg={6} />
