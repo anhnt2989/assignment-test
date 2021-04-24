@@ -1,0 +1,17 @@
+{
+  "presets": [
+    "module:assignment-test-babel-preset"
+  ],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "root": [
+          "./src"
+        ]
+      }
+    ],
+    "emotion"
+  ]
+}
