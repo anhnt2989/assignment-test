@@ -24,7 +24,7 @@ export async function getCoordinatesFromLocationName(requestParams: CoordinateAP
   }
 }
 
-export async function getCFHWeather(requestParams: CFWeatherAPIParams): Promise<CFWeatherResponse> {
+export async function getCFWeather(requestParams: CFWeatherAPIParams): Promise<CFWeatherResponse> {
   try {
     const response: CFWeatherResponse = await axios().get(Utils.buildUrlWithParams(Endpoints.GET_CF_WEATHER, {...requestParams, appId: API_KEY}))
     return response
