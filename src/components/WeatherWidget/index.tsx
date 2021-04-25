@@ -37,30 +37,33 @@ function WeatherWidget(props: WeatherWidgetProps) {
       let preLoad = {
         date,
         icon: weatherOverall.icon,
-        temperature: weatherOverall.temperature
+        temperature: weatherOverall.temperature,
+        wStatus: weatherStatus
       }
       setSelectedWeatherOverall(preLoad)
     }
-  }, [weatherOverall, date, currentUnit])
+  }, [weatherOverall, date, currentUnit, weatherStatus])
 
   const onChangeTempUnit = (unit: string) => {
     handleChangeTempUnit && handleChangeTempUnit(unit)
   }
 
   const handleSelectForecast = (forecast: Forecast, index: number) => {
-    const { date, icon, maxTemperature, avgTemperature } = forecast
+    const { date, icon, maxTemperature, avgTemperature, wStatus } = forecast
     let afterLoad = {...selectedWeatherOverall}
     if (index === 0) {
       afterLoad = {
         date: `${fullDays[new Date(date).getDay()]}`,
         icon,
-        temperature: avgTemperature
+        temperature: avgTemperature,
+        wStatus
       }
     } else {
       afterLoad = {
         date: `${fullDays[new Date(date).getDay()]}`,
         icon,
-        temperature: maxTemperature
+        temperature: maxTemperature,
+        wStatus
       }
     }
     setSelectedWeatherOverall(afterLoad)
@@ -76,9 +79,9 @@ function WeatherWidget(props: WeatherWidgetProps) {
                 <Col xs={24}>
                   <Title level={4} className="w-widget__info-block__title" >{location && location}</Title>
                   <div className="w-widget__info-block__info">
-                    <Text>{date && date}</Text>
+                    <Text>{selectedWeatherOverall && selectedWeatherOverall.date}</Text>
                     <Text className="mx-2">•</Text>
-                    <Text>{weatherStatus && weatherStatus}</Text>
+                    <Text>{selectedWeatherOverall && selectedWeatherOverall.wStatus}</Text>
                   </div>
                 </Col>
               </Row>

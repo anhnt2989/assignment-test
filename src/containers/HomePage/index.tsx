@@ -80,7 +80,8 @@ function HomePage() {
             icon: `http://openweathermap.org/img/wn/${el.weather[0].icon}@2x.png`,
             maxTemperature: el.temp.max,
             minTemperature: el.temp.min,
-            avgTemperature: el.temp.eve
+            avgTemperature: el.temp.eve,
+            wStatus: el.weather[0].main
           }
           
         })
