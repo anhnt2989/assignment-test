@@ -24,6 +24,7 @@ export interface WeatherWidgetProps {
 }
 
 export interface Forecast {
+  id?: string
   date: number
   icon: string
   maxTemperature: number

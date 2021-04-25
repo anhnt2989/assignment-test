@@ -49,10 +49,11 @@ function WeatherWidget(props: WeatherWidgetProps) {
   }
 
   const handleSelectForecast = (forecast: Forecast, index: number) => {
-    const { date, icon, maxTemperature, avgTemperature, wStatus } = forecast
+    const { id, date, icon, maxTemperature, avgTemperature, wStatus } = forecast
     let afterLoad = {...selectedWeatherOverall}
     if (index === 0) {
       afterLoad = {
+        id,
         date: `${fullDays[new Date(date).getDay()]}`,
         icon,
         temperature: avgTemperature,
@@ -60,6 +61,7 @@ function WeatherWidget(props: WeatherWidgetProps) {
       }
     } else {
       afterLoad = {
+        id,
         date: `${fullDays[new Date(date).getDay()]}`,
         icon,
         temperature: maxTemperature,
@@ -115,8 +117,9 @@ function WeatherWidget(props: WeatherWidgetProps) {
             <div className="w-widget__forecast">
               <Row>
                 {forecast && !isEmpty(forecast) && map(forecast, (fc: Forecast, index) => {
+                  // console.log('fc.id:::',fc.id)
                   return (
-                    <Col xs={3} key={`forecast--${index}`} className={`text-center forecast__wrapper ${isEqual(fc, selectedWeatherOverall) && 'activated'}`} onClick={() => handleSelectForecast(fc, index)}>
+                    <Col xs={3} key={`forecast--${index}`} className={`text-center forecast__wrapper ${isEqual(fc.id, selectedWeatherOverall.id) && 'activated'}`} onClick={() => handleSelectForecast(fc, index)}>
                       <div className="forecast__dt">
                         {`${days[new Date(fc.date).getDay()]}`}
                       </div>

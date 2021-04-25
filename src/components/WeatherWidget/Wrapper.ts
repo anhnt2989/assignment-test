@@ -62,8 +62,8 @@ const Wrapper = styled.div`
     padding: 20px 0px;
     cursor: pointer;
     transition: background-color .3s ease-in-out;
-    &:hover {
-      background-color: #f7f7f7;          // used to use ThemeProvider of styled-components to use color code as variables
+    &:hover, &.activated {
+      background-color: #eeeeee;          // used to use ThemeProvider of styled-components to use color code as variables
     }
     &:last-child {
       border-right: none !important;
