@@ -28,4 +28,5 @@ export interface Forecast {
   icon: string
   maxTemperature: number
   minTemperature: number
+  avgTemperature?: number
 }

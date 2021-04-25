@@ -56,9 +56,14 @@ const Wrapper = styled.div`
     }
   }
   .forecast__wrapper {
-    border-top: 1px solid rgba(150,150,150,0.3);
-    border-right: 1px solid rgba(150,150,150,0.3);
+    border-top: 1px solid rgba(150,150,150,0.3);          // used to use ThemeProvider of styled-components to use color code as variables
+    border-right: 1px solid rgba(150,150,150,0.3);          // used to use ThemeProvider of styled-components to use color code as variables
     padding: 20px 0px;
+    cursor: pointer;
+    transition: background-color .3s ease-in-out;
+    &:hover {
+      background-color: #f7f7f7;          // used to use ThemeProvider of styled-components to use color code as variables
+    }
     &:last-child {
       border-right: none !important;
     }
@@ -79,6 +84,7 @@ const Wrapper = styled.div`
   .w-widget__no-data {
     text-align: center;
     padding: 5rem 0;
+    background-color: #f2f2f2;          // used to use ThemeProvider of styled-components to use color code as variables
     .w-widget__no-data-desc {
       margin-top: 2rem;
       span {

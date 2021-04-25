@@ -83,10 +83,10 @@ export const Utils = {
   formatCF: function(temp: number, currentUnit: string) {
     let temperature: number
     switch(currentUnit) {
-      case 'celcius':
-        temperature = (temp - 32) / (9/5)
+      case 'metric':
+        temperature = (temp - 32) / 1.8
         break
-      case 'farenheit':
+      case 'imperial':
         temperature = temp
         break
       default:

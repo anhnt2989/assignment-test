@@ -59,7 +59,7 @@ function WeatherWidget(props: WeatherWidgetProps) {
                       {weatherOverall && <Title level={1} className="w-widget__title-temp">{Math.floor(weatherOverall.temperature)}&#176;</Title>}
                     </Col>
                     <Col xs={4} sm={4}>
-                      <p className="w-widget__unit-selector"><span className={`${currentUnit && currentUnit === 'farenheit' && 'activated'}`} onClick={() => onChangeTempUnit('farenheit')}>F</span>  /  <span className={`${currentUnit && currentUnit === 'celcius' && 'activated'}`} onClick={() => onChangeTempUnit('celcius')}>C</span></p>
+                      <p className="w-widget__unit-selector"><span className={`${currentUnit && currentUnit === 'imperial' && 'activated'}`} onClick={() => onChangeTempUnit('imperial')}>F</span><span className="mx-2">/</span><span className={`${currentUnit && currentUnit === 'metric' && 'activated'}`} onClick={() => onChangeTempUnit('metric')}>C</span></p>
                     </Col>
                   </Row>
                 </Col>
