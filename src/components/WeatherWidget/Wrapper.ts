@@ -28,6 +28,7 @@ const Wrapper = styled.div`
     white-space: nowrap;
     display: flex;
     align-items: center;
+    justify-content: center;
     height: 100%;
     color: #000000;          // used to use ThemeProvider of styled-components to use color code as variables
   }
