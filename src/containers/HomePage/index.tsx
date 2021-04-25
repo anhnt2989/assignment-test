@@ -28,7 +28,7 @@ function HomePage() {
   const [weatherOverall, setWeatherOverall] = React.useState(null)
   const [weatherInfo, setWeatherInfo] = React.useState(null)
   const [locationParam, setLocationParam] = React.useState({q: ''})
-  const [unit, setUnit] = React.useState('farenheit')
+  const [unit, setUnit] = React.useState('imperial')
   const [windSpeedUnit, setWindSpeedUnit] = React.useState('MPH')
   const [currentAqiLevel, setCurrentAqiLevel] = React.useState('Good')
   const [weatherStatus, setWeatherStatus] = React.useState('Unknown')
@@ -39,7 +39,7 @@ function HomePage() {
   React.useEffect(() => {
     if (currentLocation) {
       const { lat, lon } = currentLocation
-      getForecastWeather({ lat, lon, exclude: 'hourly' })
+      getForecastWeather({ lat, lon, exclude: 'hourly', units: unit })
       getPollutionStatus({ lat, lon })
     }
     // eslint-disable-next-line
@@ -65,21 +65,22 @@ function HomePage() {
         const status = response?.current?.weather[0]?.main ?? 'Unknown'
         const overall = {
           icon: `http://openweathermap.org/img/wn/${response?.current?.weather[0]?.icon}@2x.png`,
-          temperature: Utils.formatCF(response?.current?.temp, unit)
+          temperature: response?.current?.temp
         }
         const info = {
           humidity: response?.current?.humidity,
           windStatus: {
-            windSpeed: windSpeedUnit === 'MPH' ? response?.current?.wind_speed : (response?.current?.wind_speed * 1.6).toFixed(2),
+            windSpeed: unit === 'imperial' ? response?.current?.wind_speed : (response?.current?.wind_speed * 3.60).toFixed(2),
             windDirection: Utils.generateWindDirection(response?.current?.wind_deg)
           }
         }
-        const forecast = map(response.daily, (el: {dt: number, weather: Array<{description: string, icon: string, id: number, main: string}>, temp: {day: 300.95, eve: number, max: number, min: number, morn: number, night: number}}) => {
+        const forecast = map(response.daily, (el: {dt: number, weather: Array<{description: string, icon: string, id: number, main: string}>, temp: {day: number, eve: number, max: number, min: number, morn: number, night: number}}) => {
           return {
             date: el.dt,
             icon: `http://openweathermap.org/img/wn/${el.weather[0].icon}@2x.png`,
-            maxTemperature: Utils.formatCF(el.temp.max, unit),
-            minTemperature: Utils.formatCF(el.temp.min, unit),
+            maxTemperature: el.temp.max,
+            minTemperature: el.temp.min,
+            avgTemperature: el.temp.eve
           }
           
         })
@@ -121,7 +122,7 @@ function HomePage() {
 
   const handleChangeTempUnit = (unit: string) => {
     setUnit(unit)
-    if (unit === 'celcius') {
+    if (unit === 'metric') {
       setWindSpeedUnit('KPH')
     } else {
       setWindSpeedUnit('MPH')
@@ -140,7 +141,7 @@ function HomePage() {
           <Col xs={24} md={3} lg={6} />
           <Col xs={24} md={18} lg={12}>
             <LocationInput 
-              placeholder="Please enter your location" 
+              placeholder="Please type your location and press Enter" 
               size="large" 
               allowClear 
               onChange={onLocationChange}
