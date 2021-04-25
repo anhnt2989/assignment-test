@@ -29,4 +29,5 @@ export interface Forecast {
   maxTemperature: number
   minTemperature: number
   avgTemperature?: number
+  wStatus?: string
 }
