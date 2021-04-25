@@ -79,6 +79,7 @@ const Wrapper = styled.div`
   .w-widget__no-data {
     text-align: center;
     padding: 5rem 0;
+    background-color: #f1f1f1;          // used to use ThemeProvider of styled-components to use color code as variables
     .w-widget__no-data-desc {
       margin-top: 2rem;
       span {
