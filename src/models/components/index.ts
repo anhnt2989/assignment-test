@@ -1,4 +1,5 @@
 export interface WeatherWidgetProps {
+  hasData: boolean
   location: string
   date: string
   weatherStatus: string
@@ -16,6 +17,7 @@ export interface WeatherWidgetProps {
     airQuantity: string
   }
   currentUnit: string
+  currentWindSpeedUnit: string
   currentAqiLevel: string
   handleChangeTempUnit: (unit: string) => void
   forecast: Array<Forecast>

@@ -6,6 +6,8 @@ import 'antd/dist/antd.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import App from './App';
 import reportWebVitals from './reportWebVitals'
+import WebFont from "webfontloader"
+WebFont.load({google: {families: ["Roboto:300,400,500,600,700"]}})
 
 const history = createBrowserHistory()
 

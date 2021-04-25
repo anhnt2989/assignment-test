@@ -2,7 +2,7 @@ import React from 'react'
 import { Container } from 'reactstrap'
 import { Row, Col, Typography } from 'antd'
 import { isEmpty, map } from 'lodash'
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 
 import LocationInput from 'components/LocationInput'
 import WeatherWidget from 'components/WeatherWidget'
@@ -19,8 +19,8 @@ import Wrapper from './HomePageWrapper'
 
 const { Title } = Typography
 
-var customParseFormat = require('dayjs/plugin/customParseFormat')
-dayjs.extend(customParseFormat)
+// var customParseFormat = require('dayjs/plugin/customParseFormat')
+// dayjs.extend(customParseFormat)
 
 function HomePage() {
   const [currentLocation, setCurrentLocation] = React.useState(null)
@@ -29,6 +29,7 @@ function HomePage() {
   const [weatherInfo, setWeatherInfo] = React.useState(null)
   const [locationParam, setLocationParam] = React.useState({q: ''})
   const [unit, setUnit] = React.useState('farenheit')
+  const [windSpeedUnit, setWindSpeedUnit] = React.useState('MPH')
   const [currentAqiLevel, setCurrentAqiLevel] = React.useState('Good')
   const [weatherStatus, setWeatherStatus] = React.useState('Unknown')
   const [forecast, setForecast] = React.useState([])
@@ -49,6 +50,8 @@ function HomePage() {
       const response = await getCoordinatesFromLocationName(locationParam)
       if (response && !isEmpty(response)) {
         setCurrentLocation(response[0])
+      } else {
+        setWeatherData(null)
       }
     } catch(error) {
 
@@ -67,7 +70,7 @@ function HomePage() {
         const info = {
           humidity: response?.current?.humidity,
           windStatus: {
-            windSpeed: response?.current?.wind_speed,
+            windSpeed: windSpeedUnit === 'MPH' ? response?.current?.wind_speed : (response?.current?.wind_speed * 1.6).toFixed(2),
             windDirection: Utils.generateWindDirection(response?.current?.wind_deg)
           }
         }
@@ -75,8 +78,8 @@ function HomePage() {
           return {
             date: el.dt,
             icon: `http://openweathermap.org/img/wn/${el.weather[0].icon}@2x.png`,
-            maxTemperature: el.temp.max,
-            minTemperature: el.temp.min,
+            maxTemperature: Utils.formatCF(el.temp.max, unit),
+            minTemperature: Utils.formatCF(el.temp.min, unit),
           }
           
         })
@@ -104,14 +107,25 @@ function HomePage() {
   }
 
   const onLocationChange = (event: any) => {
-    let coordinateParams = {
-      q: event.target.value,
+    // eslint-disable-next-line
+    if (event.target.value && event.target.value != '') {
+      let coordinateParams = {
+        q: event.target.value,
+      }
+      setLocationParam(coordinateParams)
+    } else {
+      setLocationParam({q: ''})
+      setWeatherData(null)
     }
-    setLocationParam(coordinateParams)
   }
 
   const handleChangeTempUnit = (unit: string) => {
     setUnit(unit)
+    if (unit === 'celcius') {
+      setWindSpeedUnit('KPH')
+    } else {
+      setWindSpeedUnit('MPH')
+    }
   }
 
   return (
@@ -135,11 +149,12 @@ function HomePage() {
           </Col>
           <Col xs={24} md={3} lg={6} />
         </Row>
-        {!!weatherData && 
+        {locationParam && !isEmpty(locationParam.q) &&
           <Row className="mt-3">
             <Col xs={24} md={3} lg={6} />
             <Col xs={24} md={18} lg={12}>
               <WeatherWidget
+                hasData={!!weatherData}
                 location={`${currentLocation?.name}, ${currentLocation?.country}`}
                 date={`${days[new Date().getDay()]} ${Utils.formatAMPM(new Date().getHours())}`}
                 weatherStatus={weatherStatus}
@@ -148,6 +163,7 @@ function HomePage() {
                 currentAqiLevel={currentAqiLevel}
                 forecast={forecast}
                 currentUnit={unit}
+                currentWindSpeedUnit={windSpeedUnit}
                 handleChangeTempUnit={handleChangeTempUnit}
               />
             </Col>

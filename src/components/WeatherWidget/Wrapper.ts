@@ -5,7 +5,7 @@ const Wrapper = styled.div`
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
   .w-widget__info-block {
-    padding: 20px 10px;
+    padding: 20px;
     .w-widget__info-block__title {
       margin-bottom: 0;
       margin-block-end: 0;
@@ -53,6 +53,38 @@ const Wrapper = styled.div`
     @media screen and (max-width) {
       padding-left: 0;
       padding-top: 0;
+    }
+  }
+  .forecast__wrapper {
+    border-top: 1px solid rgba(150,150,150,0.3);
+    border-right: 1px solid rgba(150,150,150,0.3);
+    padding: 20px 0px;
+    &:last-child {
+      border-right: none !important;
+    }
+    .forecast__dt {
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .forecast__temp-block {
+      .forecast__max-temp {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .forecast__min-temp {
+        font-size: 14px;
+      }
+    }
+  }
+  .w-widget__no-data {
+    text-align: center;
+    padding: 5rem 0;
+    .w-widget__no-data-desc {
+      margin-top: 2rem;
+      span {
+        font-size: 18px;
+        color: #333333;           // used to use ThemeProvider of styled-components to use color code as variables
+      }
     }
   }
 `

@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { Switch, Route } from 'react-router-dom'
 import HomePage from 'containers/HomePage'
 
+import GlobalStyles from './global-styles'
+
 const AppWrapper = styled.div``
 
 function App() {
@@ -11,6 +13,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={HomePage} />
       </Switch>
+      <GlobalStyles />
     </AppWrapper>
   );
 }

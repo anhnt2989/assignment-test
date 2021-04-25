@@ -2159,6 +2159,11 @@
   dependencies:
     "source-map" "^0.6.1"
 
+"@types/webfontloader@^1.6.32":
+  "integrity" "sha512-l83V/2iHvBTIlKUM1+UlabS/Jd65HVfKmqS+zPhwDlgldPtd5ujPDt0Y1es19xLWcN8NC3wwSTd71Qxbst+Kpw=="
+  "resolved" "https://registry.npmjs.org/@types/webfontloader/-/webfontloader-1.6.32.tgz"
+  "version" "1.6.32"
+
 "@types/webpack-sources@*":
   "integrity" "sha512-LXn/oYIpBeucgP1EIJbKQ2/4ZmpvRl+dlrFdX7+94SKRUV3Evy3FsfMZY318vGhkWUS5MPhtOM3w1/hCOAOXcg=="
   "resolved" "https://registry.npmjs.org/@types/webpack-sources/-/webpack-sources-2.1.0.tgz"
@@ -12447,6 +12452,11 @@
   "integrity" "sha512-jYOaqu01Ny1NvMwJ3dBJDUOJ2PGWknZWH4AUnvFOscvbdHMERIKT2TlgiAey5rVyfOePG7so2JcXXZdSnBvioQ=="
   "resolved" "https://registry.npmjs.org/web-vitals/-/web-vitals-1.1.1.tgz"
   "version" "1.1.1"
+
+"webfontloader@^1.6.28":
+  "integrity" "sha1-23hhKSU8tujq5UwvsF+HCvZnW64="
+  "resolved" "https://registry.npmjs.org/webfontloader/-/webfontloader-1.6.28.tgz"
+  "version" "1.6.28"
 
 "webidl-conversions@^5.0.0":
   "integrity" "sha512-VlZwKPCkYKxQgeSbH5EyngOmRp7Ww7I9rQLERETtf5ofd9pGeswWiOtogpEO850jziPRarreGxn5QIiTqpb2wA=="
