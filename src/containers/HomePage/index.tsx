@@ -77,7 +77,7 @@ function HomePage() {
         const forecast = map(response.daily, (el: {dt: number, weather: Array<{description: string, icon: string, id: number, main: string}>, temp: {day: number, eve: number, max: number, min: number, morn: number, night: number}}, index: number) => {
           return {
             id: `fc--${index}`,
-            date: el.dt,
+            date: el.dt * 1000,
             icon: `http://openweathermap.org/img/wn/${el.weather[0].icon}@2x.png`,
             maxTemperature: el.temp.max,
             minTemperature: el.temp.min,
